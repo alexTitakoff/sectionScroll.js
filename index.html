@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Section Scroll</title>
+</head>
+
+
+<style>
+	
+
+
+	html {
+		height: 100%; }
+
+		body {
+			margin: 0px;
+			font: 400 12px/22px 'Open Sans', Verdana, Helvetica, sans-serif;
+			color: #6a6969;
+			background-attachment: fixed;
+			height: 100%; 
+			background: #363834;
+
+		}
+
+		h1 {
+			font: 400 35px/40px  'PT Sans Narrow Bold', Georgia, serif;
+			color: #6a6969;
+			margin: 14px 0; 
+
+		}
+
+		h2 {
+			font: 400 18px/22px 'PT Sans Narrow Bold', Georgia, serif;
+			color: #6a6969; 
+
+		}
+
+		h3 {
+			font: 400 14px/16px 'PT Sans Narrow Bold', Georgia, serif;
+			color: #6a6969; 
+
+		}
+
+		ul {
+			margin: 0px;
+			padding: 0px; 
+
+		}
+
+		a {
+			text-decoration: none;
+			color: #6a6969; 
+		}
+
+
+
+		a:hover {
+			color: #979797; 
+
+		}
+
+		a img {
+			border: 0px; 
+
+		}
+
+		.container {
+			width: 950px;
+			margin: 0px auto 0px auto;
+			
+			overflow: hidden;
+			height: 900px; 
+
+		}
+		.menu_fullpage {
+			float: left;
+			width: 20%;
+			position: absolute;
+			top: 37%;
+			z-index: 2;
+			border: 4px solid #fff; 
+			padding: 20px;
+
+		}
+
+		.menu_fullpage li {
+			font-size: 18px;
+			color: #fff;
+			line-height: 45px;
+			cursor: pointer;
+			list-style: none;
+
+		}
+		.content_bar {
+			float: right;
+			width: 70%;
+			border: 1px solid #60645F; 
+
+
+		}
+
+		.section {
+			height: 100%;
+			background: #9EA69E;
+			position: relative;
+			text-align: center;
+			
+		}
+
+		.section div {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: auto;
+			height: 28px;
+			right: 0;
+			left: 0;
+			margin: auto;
+			display: block;
+			font-size: 35px;
+			color: #fff;
+		}
+		.color2 {
+			background: #A68589; 
+
+		}
+		.color3 {
+			background: #96A667; 
+
+		}
+
+		/*# sourceMappingURL=maps/style.css.map */
+
+
+
+	</style>
+
+	<body>
+		<div class="container">
+			<div class="menu_fullpage" id="main-menu">
+				<li>section1</li>
+				<li>section2</li>
+				<li>section3</li>
+			</div>
+
+
+
+			<div  data-fullpage="0" class="section">
+				<div>1</div>
+			</div>
+			<div data-fullpage="1" class="section color2">
+				<div>2</div>
+			</div>
+			<div data-fullpage="2" class="section color3">
+				<div>3</div>
+			</div>
+
+
+
+
+
+
+		</div>  <!--  container  судя по всему main -->
+		<script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js?ver=3.3"></script>
+		<script type="text/javascript" src="jquery.easing.1.3.js"></script>
+
+
+
+		<script type="text/javascript">
+		 //скрипт скроллинга
+		 		var sectionHeight = $('.container').height(); // высота контейнера и соотве каждой секции
+		 		var sectionLength = $('.container .section').length;
+		 		var currentSection = 1;
+		 		var fullpageThis = $('.container');
+		 		var scrollTimer = 0;
+		 // console.log(sectionLength);
+
+
+		 $(function() {
+		 	$('#main-menu li a').bind('click',function(event){
+		 		var $anchor = $(this);
+     					// console.log($($anchor.attr('href')).offset().top); /// переписать это дерьмо попырому надо бы
+
+     					var scrollPoint = 0;
+
+     					if ($(this).attr('href') == '#about' ) {
+     						var scrollPoint = sectionHeight * 0;
+     					} else if ($(this).attr('href') == '#skills') {
+     						var scrollPoint = sectionHeight * 1;
+     					} else if($(this).attr('href') == '#experience' ) {
+     						var scrollPoint = sectionHeight * 2;
+     					}
+
+     					$(fullpageThis).stop().animate({
+     						scrollTop: scrollPoint}, 1500,'easeInOutExpo');
+     					event.preventDefault();
+     				});
+		 });
+
+
+
+		//якори для пунктов
+		$(fullpageThis).find('.menu_fullpage').children().each(function() {
+			$(this).addClass('sec-anchor')
+			$(this).click(function() {
+				var indexSlide =  $(this).index() + 1;
+
+				scrollTo(indexSlide);			
+			})
+		})
+		//якори для пунктов
+
+
+
+
+
+
+
+
+
+  		// авто скролиинг вверх-вниз, а для этого нужна интентификация
+
+  		function scrollTo(index) {  
+  			var scrollPoint = scrollPointFromIndex(index);
+  			//console.log(scrollPoint);
+  			$(fullpageThis).stop().animate({
+  				scrollTop: scrollPoint}, 1500,'easeInOutExpo');
+  			event.preventDefault();
+  			setTimeout(function() {
+  				scrollTimer = '0';  
+  			},1500);
+
+  			setTimeout(function() {
+  				defCurrentSection();
+  			},1700);
+  		}
+
+
+  		function scrollPointFromIndex(index) {
+  			index = index - 1;
+  			return sectionHeight * index;
+  		}
+
+  		function defCurrentSection() {
+  			currentScroll = $(fullpageThis).scrollTop();
+  			console.log( 'скролл: '  + currentScroll);
+  			currentSection = currentScroll / sectionHeight + 1;
+  			console.log( 'секция: ' + currentSection); 
+  		}
+
+
+
+
+  		//var cont = fullpageThis;
+  		$(fullpageThis).on('mousewheel',function(e){
+
+  			e = event;
+  			var wheelDelta = e.deltaY || e.detail || e.wheelDelta;
+  			// console.log(wheelDelta);
+
+    		//определение направления скроллинга
+    		if (wheelDelta > 0){
+    		//console.log('down');
+    		currentSection = parseInt(currentSection);
+    		nextSection = currentSection + 1;
+    			//console.log(nextSection);
+    			if (scrollTimer == '0') {
+    				scrollTimer = '1';
+    				scrollTo(nextSection);
+    			}
+    		} else {
+    			//console.log('up');
+    			currentSection = parseInt(currentSection);
+    			nextSection = currentSection - 1;
+    			if (scrollTimer == '0') {
+    				scrollTimer = '1';
+    				scrollTo(nextSection);
+    			}
+    		}
+    		//определение направления скроллинга
+
+    		return false;
+    	});
+    	// авто скролиинг вверх-вниз, а для этого нужна интентификация
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>
